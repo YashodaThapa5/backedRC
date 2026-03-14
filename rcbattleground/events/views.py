@@ -57,4 +57,33 @@ class EventCreateListView(generics.ListCreateAPIView):
 class EventRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
   queryset = Event.objects.all()
   serializer_class = EventSerializer
+
+# Slot views
+class SlotListCreateView(generics.ListCreateAPIView):
+    queryset = Slot.objects.all()
+    serializer_class = SlotSerializer
+    permission_classes = [AllowAny]
+
+class SlotRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Slot.objects.all()
+    serializer_class = SlotSerializer
+    permission_classes = [IsAdminUser]
+
+# Booking views
+class BookingListCreateView(generics.ListCreateAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class BookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Users can only see their own bookings
+        return Booking.objects.filter(user=self.request.user)
   

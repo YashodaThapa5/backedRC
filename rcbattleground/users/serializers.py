@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
 
@@ -41,4 +42,20 @@ class RegisterSerializer(serializers.ModelSerializer):
     user.set_password(validated_data['password'])
     user.save()
     return user
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims
+        try:
+            profile = user.userprofile
+            role = profile.role
+        except:
+            role = 'user'
+        # If user is staff or superuser, role is admin
+        if user.is_staff or user.is_superuser:
+            role = 'admin'
+        token['role'] = role
+        return token
   

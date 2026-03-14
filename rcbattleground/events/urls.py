@@ -27,5 +27,13 @@ urlpatterns = [
     # get, update, and delete a specific event
     # http://127.0.0.1:8000/api/events/1/
     path('events/<int:pk>/', EventRetrieveUpdateDeleteView.as_view(), name='event-retrieve-update-delete'),
+
+    # Slots
+    path('slots/', SlotListCreateView.as_view(), name='slot-list-create'),
+    path('slots/<int:pk>/', SlotRetrieveUpdateDeleteView.as_view(), name='slot-retrieve-update-delete'),
+
+    # Bookings
+    path('bookings/', BookingListCreateView.as_view(), name='booking-list-create'),
+    path('bookings/<int:pk>/', BookingRetrieveUpdateDeleteView.as_view(), name='booking-retrieve-update-delete'),
   
 ]
