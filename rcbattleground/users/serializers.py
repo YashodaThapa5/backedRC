@@ -1,8 +1,17 @@
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import UserProfile
 
 User = get_user_model()
+
+class UserListSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source='userprofile.role', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'is_staff', 'role']
 
 class RegisterSerializer(serializers.ModelSerializer):
   first_name = serializers.CharField(required=True)
@@ -47,7 +56,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        # Add custom claims
+        # AddRequest failed with status code 400 custom claims
         try:
             profile = user.userprofile
             role = profile.role

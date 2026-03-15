@@ -1,9 +1,22 @@
+
+from rest_framework import permissions
 from rest_framework import generics
 from django.contrib.auth import get_user_model
-from .serializers import RegisterSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserListSerializer, RegisterSerializer, CustomTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 User = get_user_model()
+
+# Admin user list, update, delete view
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 # Create your views here.
 class RegisterView(generics.CreateAPIView):

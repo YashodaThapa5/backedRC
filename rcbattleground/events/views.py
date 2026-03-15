@@ -84,6 +84,16 @@ class BookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Users can only see their own bookings
-        return Booking.objects.filter(user=self.request.user)
+      user = self.request.user
+      if user.is_staff:
+        return Booking.objects.all()
+      return Booking.objects.filter(user=user)
+
+    def perform_update(self, serializer):
+      # Only admin can update status, users can update their own bookings (except status)
+      user = self.request.user
+      if user.is_staff:
+        serializer.save()
+      else:
+        serializer.save(status=self.get_object().status)
   

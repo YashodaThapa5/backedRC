@@ -50,6 +50,7 @@ class Booking(models.Model):
     slot = models.ForeignKey(Slot, on_delete=models.CASCADE)
     booking_date = models.DateField()
     booking_time = models.CharField(max_length=20)  # e.g., "8:00 AM"
+    status = models.CharField(max_length=20, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

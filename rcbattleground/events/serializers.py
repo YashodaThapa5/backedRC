@@ -24,7 +24,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['id', 'user', 'slot', 'slot_title', 'booking_date', 'booking_time', 'created_at']
+        fields = ['id', 'user', 'slot', 'slot_title', 'booking_date', 'booking_time', 'status', 'created_at']
 
     def validate(self, data):
         slot = data['slot']
