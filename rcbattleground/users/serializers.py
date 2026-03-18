@@ -7,11 +7,13 @@ from .models import UserProfile
 User = get_user_model()
 
 class UserListSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(source='userprofile.role', read_only=True)
+    role = serializers.CharField(source='profile.role', read_only=True)
 
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'is_staff', 'role']
+
+
 
 class RegisterSerializer(serializers.ModelSerializer):
   first_name = serializers.CharField(required=True)
@@ -56,14 +58,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        # AddRequest failed with status code 400 custom claims
+        # Safely extract role
         try:
-            profile = user.userprofile
+            profile = user.profile  # <- use related_name
             role = profile.role
         except:
             role = 'user'
-        # If user is staff or superuser, role is admin
-        if user.is_staff or user.is_superuser:
+        if user.is_superuser:
             role = 'admin'
         token['role'] = role
         return token

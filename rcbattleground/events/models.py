@@ -3,6 +3,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 class Category(models.Model):
   name=models.CharField(max_length=100 , unique=True) 
@@ -31,6 +32,21 @@ class Event(models.Model):
   def __str__(self):
     return self.name
   
+class Booking(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    booking_date = models.DateField()
+    booking_time = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, default="pending")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('event', 'booking_date', 'booking_time', 'user')  # Prevent duplicate bookings
+
+
+    def __str__(self):
+        return f"{self.user.username} - {self.event.name} - {self.booking_date} {self.booking_time}"
+
 class Slot(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='slots', null=True, blank=True)
     slotTitle = models.CharField(max_length=200)

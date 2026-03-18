@@ -35,5 +35,6 @@ urlpatterns = [
     # Bookings
     path('bookings/', BookingListCreateView.as_view(), name='booking-list-create'),
     path('bookings/<int:pk>/', BookingRetrieveUpdateDeleteView.as_view(), name='booking-retrieve-update-delete'),
+    
   
 ]
