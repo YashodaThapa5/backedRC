@@ -77,6 +77,14 @@ class BookingListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        
+class SlotBookingCreateView(generics.CreateAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class BookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Booking.objects.all()
@@ -96,4 +104,17 @@ class BookingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         serializer.save()
       else:
         serializer.save(status=self.get_object().status)
+ 
+        
+class UserBookingListView(generics.ListAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)   
+
+
+      
+   
+        
   

@@ -36,5 +36,11 @@ urlpatterns = [
     path('bookings/', BookingListCreateView.as_view(), name='booking-list-create'),
     path('bookings/<int:pk>/', BookingRetrieveUpdateDeleteView.as_view(), name='booking-retrieve-update-delete'),
     
+    # User's bookings
+    # http://127.0.0.1:8000/api/bookings/my/
+    path('bookings/my/', UserBookingListView.as_view(), name='my-bookings'),
+    
+    path("slot-bookings/", SlotBookingCreateView.as_view(), name="slot-bookings"),
+    
   
 ]
